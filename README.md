@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Policy Document Comparison System
 
 A deterministic-first Python system that compares two versions of a policy/regulation/internal guideline document.
@@ -134,4 +134,3 @@ Open **[http://127.0.0.1:5000](http://127.0.0.1:5000)** in your browser.
 
 ---
 
->>>>>>> 3af9f2c5ed86752afa496b0c8d8b47d938169d03
