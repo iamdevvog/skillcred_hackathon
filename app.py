@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 """
 Flask Web Application for Policy Document Comparison System.
 Serves a modern HTML/CSS/JS frontend with real-time comparison APIs.
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     # Launch browser automatically
     threading.Timer(1.2, open_browser).start()
     app.run(host="127.0.0.1", port=5000, debug=False)
-=======
+
 from flask import Flask, render_template, request, jsonify, Response
 from werkzeug.utils import secure_filename
 import os, re, difflib, io, csv
@@ -950,4 +950,3 @@ def export_csv():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
->>>>>>> 3af9f2c5ed86752afa496b0c8d8b47d938169d03
