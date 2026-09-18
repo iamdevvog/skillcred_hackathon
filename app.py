@@ -1,4 +1,3 @@
-
 """
 Flask Web Application for Policy Document Comparison System.
 Serves a modern HTML/CSS/JS frontend with real-time comparison APIs.
