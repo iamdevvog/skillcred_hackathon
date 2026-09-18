@@ -1,5 +1,5 @@
 
-# Elovix
+# Evolvix
 
 A deterministic-first Python system that compares two versions of a policy/regulation/internal guideline document.
 
