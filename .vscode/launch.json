@@ -1,0 +1,52 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Launch Web App (HTML/CSS/JS)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Launch Streamlit App (Alternative)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "streamlit",
+      "args": [
+        "run",
+        "${workspaceFolder}/streamlit_app.py"
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Run Demo Script",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/demo.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Run Benchmark Evaluation",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.evaluator",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Run All Unit Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "console": "integratedTerminal"
+    }
+  ]
+}

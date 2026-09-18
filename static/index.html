@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy Document Comparison System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="brand-icon">⚖️</span>
+        <div class="brand-text">
+          <h1>Policy Comparator</h1>
+          <span class="brand-tag">Deterministic & Semantic Verification Engine</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="btn-load-sample" class="btn btn-secondary">
+          <span class="icon">📄</span> Load Sample Policy (V1 vs V2)
+        </button>
+        <button id="btn-eval" class="btn btn-secondary">
+          <span class="icon">🎯</span> Benchmark (95.7% F1)
+        </button>
+        <button id="btn-export-json" class="btn btn-outline" disabled>
+          <span class="icon">💾</span> Export JSON
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Ingestion & Upload Section -->
+    <section class="card upload-section">
+      <div class="section-heading">
+        <h2>Document Ingestion</h2>
+        <p>Upload two plain text policy/regulation files or use the pre-loaded benchmark files.</p>
+      </div>
+
+      <div class="dropzone-grid">
+        <!-- Document 1 Dropzone -->
+        <div class="dropzone-card" id="dropzone-v1">
+          <div class="dropzone-header">
+            <span class="version-pill v1-pill">Version 1 (Baseline)</span>
+            <span class="file-status" id="status-v1">No file chosen</span>
+          </div>
+          <div class="drop-area" id="drop-area-v1">
+            <span class="upload-icon">📥</span>
+            <p class="drop-prompt">Drag & drop <strong>Version 1 (.txt)</strong> here or <label for="file-v1" class="browse-link">browse</label></p>
+            <input type="file" id="file-v1" accept=".txt" class="hidden-input">
+          </div>
+          <div class="text-preview-box">
+            <div class="preview-header">
+              <span>Text Preview</span>
+              <button class="btn-text-action" id="btn-edit-v1">Edit / Paste</button>
+            </div>
+            <textarea id="text-v1" placeholder="Paste or drop Version 1 text here..." rows="5"></textarea>
+          </div>
+        </div>
+
+        <!-- Document 2 Dropzone -->
+        <div class="dropzone-card" id="dropzone-v2">
+          <div class="dropzone-header">
+            <span class="version-pill v2-pill">Version 2 (Revised)</span>
+            <span class="file-status" id="status-v2">No file chosen</span>
+          </div>
+          <div class="drop-area" id="drop-area-v2">
+            <span class="upload-icon">📥</span>
+            <p class="drop-prompt">Drag & drop <strong>Version 2 (.txt)</strong> here or <label for="file-v2" class="browse-link">browse</label></p>
+            <input type="file" id="file-v2" accept=".txt" class="hidden-input">
+          </div>
+          <div class="text-preview-box">
+            <div class="preview-header">
+              <span>Text Preview</span>
+              <button class="btn-text-action" id="btn-edit-v2">Edit / Paste</button>
+            </div>
+            <textarea id="text-v2" placeholder="Paste or drop Version 2 text here..." rows="5"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-action-bar">
+        <div class="threshold-slider-box">
+          <label for="similarity-slider">
+            Alignment Similarity Threshold: <span id="threshold-val">0.40</span>
+          </label>
+          <input type="range" id="similarity-slider" min="0.10" max="0.90" step="0.05" value="0.40">
+        </div>
+        <button id="btn-compare" class="btn btn-primary btn-large">
+          <span class="icon">⚡</span> Run Deterministic & Semantic Comparison
+        </button>
+      </div>
+    </section>
+
+    <!-- Results Section (Hidden until comparison is run) -->
+    <section id="results-container" class="results-section hidden">
+      <!-- High-Level Metric Cards -->
+      <div class="metric-grid">
+        <div class="metric-card card-total">
+          <div class="metric-icon">🔄</div>
+          <div class="metric-content">
+            <span class="metric-label">Total Changes</span>
+            <span class="metric-value" id="metric-total">0</span>
+          </div>
+        </div>
+        <div class="metric-card card-added">
+          <div class="metric-icon">➕</div>
+          <div class="metric-content">
+            <span class="metric-label">Added Sections</span>
+            <span class="metric-value" id="metric-added">0</span>
+          </div>
+        </div>
+        <div class="metric-card card-removed">
+          <div class="metric-icon">➖</div>
+          <div class="metric-content">
+            <span class="metric-label">Removed Sections</span>
+            <span class="metric-value" id="metric-removed">0</span>
+          </div>
+        </div>
+        <div class="metric-card card-modified">
+          <div class="metric-icon">✏️</div>
+          <div class="metric-content">
+            <span class="metric-label">Modified Sections</span>
+            <span class="metric-value" id="metric-modified">0</span>
+          </div>
+        </div>
+        <div class="metric-card card-unchanged">
+          <div class="metric-icon">✅</div>
+          <div class="metric-content">
+            <span class="metric-label">Unchanged Sections</span>
+            <span class="metric-value" id="metric-unchanged">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Explorer: Left List + Right Detail Inspector -->
+      <div class="explorer-container card">
+        <!-- Left Sidebar: Section List & Filters -->
+        <div class="explorer-sidebar">
+          <div class="sidebar-top">
+            <h3>Detected Sections</h3>
+            <!-- Filter Pills -->
+            <div class="filter-pills" id="filter-pills">
+              <button class="pill-btn active" data-filter="all">All (<span id="count-all">0</span>)</button>
+              <button class="pill-btn" data-filter="modified">Modified (<span id="count-modified">0</span>)</button>
+              <button class="pill-btn" data-filter="added">Added (<span id="count-added">0</span>)</button>
+              <button class="pill-btn" data-filter="removed">Removed (<span id="count-removed">0</span>)</button>
+              <button class="pill-btn" data-filter="unchanged">Unchanged (<span id="count-unchanged">0</span>)</button>
+            </div>
+            <!-- Search Bar -->
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" placeholder="Filter by section title or keyword...">
+            </div>
+          </div>
+
+          <!-- Section List Items -->
+          <div class="section-list" id="section-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Right Main: Detail & Evidence Inspector -->
+        <div class="explorer-detail" id="explorer-detail">
+          <div class="empty-detail-state" id="detail-empty">
+            <span class="empty-icon">👈</span>
+            <p>Select a section from the list to inspect verified evidence, exact text deltas, and detected value changes.</p>
+          </div>
+
+          <div class="detail-content hidden" id="detail-active">
+            <!-- Header with Title and Badges -->
+            <div class="detail-header">
+              <div class="title-row">
+                <span id="detail-change-type" class="badge-type">MODIFIED</span>
+                <h3 id="detail-title">Section Title</h3>
+              </div>
+              <div class="meta-row">
+                <span class="meta-item"><strong>Category:</strong> <span id="detail-category" class="cat-tag">eligibility</span></span>
+                <span class="meta-item"><strong>Similarity:</strong> <span id="detail-similarity">0.91</span></span>
+                <span class="meta-item"><strong>Alignment:</strong> <span id="detail-method">exact_title</span></span>
+              </div>
+            </div>
+
+            <!-- Reliability Rule Shield Banner -->
+            <div id="detail-verification-banner" class="verification-banner banner-verified">
+              <div class="banner-icon" id="banner-icon">🛡️</div>
+              <div class="banner-text">
+                <strong id="banner-title">VERIFIED EVIDENCE PAIR</strong>
+                <p id="banner-desc">An aligned old/new evidence pair was identified. Changes are verified and groundable.</p>
+              </div>
+            </div>
+
+            <!-- Value & Threshold Changes -->
+            <div class="detail-box" id="box-entities">
+              <div class="box-title">
+                <h4>🎯 Critical Value & Threshold Changes</h4>
+                <span class="badge-count" id="entities-count">0 changes</span>
+              </div>
+              <div class="entity-cards" id="entity-cards-container">
+                <!-- Dynamically populated entity pills -->
+              </div>
+            </div>
+
+            <!-- View Modes: Inline Word Diff vs Side-by-Side Split View -->
+            <div class="diff-view-selector">
+              <div class="selector-tabs">
+                <button class="tab-btn active" id="tab-word-diff">🔀 Inline Visual Diff</button>
+                <button class="tab-btn" id="tab-split-diff">📑 Side-by-Side Split View</button>
+              </div>
+              <button class="btn-copy" id="btn-copy-evidence">📋 Copy Evidence</button>
+            </div>
+
+            <!-- Inline Word Diff Container -->
+            <div class="diff-panel" id="panel-word-diff">
+              <div class="diff-legend">
+                <span class="legend-del"><del>Red strike-through</del> = Deleted from V1</span>
+                <span class="legend-ins"><ins>Green highlight</ins> = Added in V2</span>
+              </div>
+              <div class="word-diff-content" id="word-diff-display">
+                <!-- Word diff html injected here -->
+              </div>
+            </div>
+
+            <!-- Side-by-Side Split View Container -->
+            <div class="diff-panel hidden" id="panel-split-diff">
+              <div class="split-grid">
+                <div class="split-col">
+                  <div class="split-header">
+                    <span>OLD VERSION (V1)</span>
+                    <span class="badge-mini" id="split-v1-lines">0 lines</span>
+                  </div>
+                  <pre class="split-text" id="split-text-v1"></pre>
+                </div>
+                <div class="split-col">
+                  <div class="split-header">
+                    <span>NEW VERSION (V2)</span>
+                    <span class="badge-mini" id="split-v2-lines">0 lines</span>
+                  </div>
+                  <pre class="split-text" id="split-text-v2"></pre>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Benchmark Modal -->
+  <div class="modal-backdrop hidden" id="modal-eval">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🎯 Benchmark Evaluation Results</h3>
+        <button class="modal-close" id="btn-modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-eval-body">
+        <p class="modal-desc">Evaluated against ground truth <code>gold_changes.json</code> benchmark dataset:</p>
+        <div class="eval-grid">
+          <div class="eval-stat">
+            <span class="eval-num text-emerald" id="eval-f1">95.65%</span>
+            <span class="eval-label">F1 Score</span>
+          </div>
+          <div class="eval-stat">
+            <span class="eval-num text-indigo" id="eval-precision">91.67%</span>
+            <span class="eval-label">Precision</span>
+          </div>
+          <div class="eval-stat">
+            <span class="eval-num text-purple" id="eval-recall">100.00%</span>
+            <span class="eval-label">Recall</span>
+          </div>
+        </div>
+        <div class="eval-details-table">
+          <div class="table-row"><span>True Positives (Correctly Identified)</span><strong id="eval-tp">11</strong></div>
+          <div class="table-row"><span>False Positives</span><strong id="eval-fp">1</strong></div>
+          <div class="table-row"><span>False Negatives (Missed)</span><strong id="eval-fn">0</strong></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btn-eval-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

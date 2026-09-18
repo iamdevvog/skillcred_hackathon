@@ -1,0 +1,94 @@
+{
+  "dataset": "University Merit Scholarship Policy V1 to V2",
+  "total_sections_v1": 10,
+  "total_sections_v2": 10,
+  "changes": [
+    {
+      "section_title": "Section 1: Purpose and Scope",
+      "change_type": "unchanged",
+      "category": "definition"
+    },
+    {
+      "section_title": "Section 2: Eligibility Criteria",
+      "change_type": "modified",
+      "category": "eligibility",
+      "entities_changed": [
+        {"entity": "CGPA", "old_value": "7.0", "new_value": "7.5"},
+        {"entity": "age", "old_value": "25", "new_value": "26"}
+      ]
+    },
+    {
+      "section_title": "Section 3: Financial Award Limits",
+      "change_type": "modified",
+      "category": "amount",
+      "entities_changed": [
+        {"entity": "currency", "old_value": "$5,000", "new_value": "$6,500"},
+        {"entity": "percentage", "old_value": "75%", "new_value": "80%"}
+      ]
+    },
+    {
+      "section_title": "Section 4: Application Deadlines",
+      "change_type": "modified",
+      "category": "deadline",
+      "entities_changed": [
+        {"entity": "date", "old_value": "May 1, 2024", "new_value": "June 15, 2024"},
+        {"entity": "date", "old_value": "May 15, 2024", "new_value": "June 30, 2024"},
+        {"entity": "currency", "old_value": "$50", "new_value": "$75"}
+      ]
+    },
+    {
+      "section_title": "Section 5: Minimum Credit Load",
+      "change_type": "modified",
+      "category": "requirement",
+      "reordered": true,
+      "entities_changed": [
+        {"entity": "number", "old_value": "15", "new_value": "14"}
+      ]
+    },
+    {
+      "section_title": "Section 6: Work-Study Prerequisite",
+      "change_type": "removed",
+      "category": "requirement"
+    },
+    {
+      "section_title": "Section 6: Appeals and Grievance Procedure",
+      "change_type": "added",
+      "category": "procedure",
+      "entities_changed": [
+        {"entity": "duration", "old_value": null, "new_value": "14 days"}
+      ]
+    },
+    {
+      "section_title": "Section 7: Renewal and Continuation",
+      "change_type": "modified",
+      "category": "eligibility",
+      "entities_changed": [
+        {"entity": "CGPA", "old_value": "7.0", "new_value": "7.5"},
+        {"entity": "percentage", "old_value": "80%", "new_value": "85%"}
+      ]
+    },
+    {
+      "section_title": "Section 8: Disqualification and Penalties",
+      "change_type": "modified",
+      "category": "penalty",
+      "entities_changed": [
+        {"entity": "CGPA", "old_value": "6.5", "new_value": "6.8"},
+        {"entity": "percentage", "old_value": "10%", "new_value": "8%"}
+      ]
+    },
+    {
+      "section_title": "Section 9: Disbursement Schedule",
+      "change_type": "modified",
+      "category": "procedure",
+      "entities_changed": [
+        {"entity": "date", "old_value": "September 15", "new_value": "September 25"},
+        {"entity": "date", "old_value": "January 20", "new_value": "February 5"}
+      ]
+    },
+    {
+      "section_title": "Section 10: General Inquiries and Contact",
+      "change_type": "unchanged",
+      "category": "other"
+    }
+  ]
+}
