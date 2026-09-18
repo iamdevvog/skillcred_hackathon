@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolicyLens — Policy & Contract Comparison System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <div class="logo-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <div>
+          <span class="brand-title">PolicyLens</span>
+          <span class="brand-subtitle">Document Comparison & Change Analyzer</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <span class="badge-online">System Ready</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="page-container">
+    
+    <!-- HERO INTRO -->
+    <div class="page-header">
+      <h1>Compare Policy Documents</h1>
+      <p>Upload two versions of a policy, contract, or guidelines to see exactly what changed, what was added, and what was removed.</p>
+    </div>
+
+    <!-- SAMPLE PRESETS -->
+    <div class="sample-presets-card">
+      <div class="presets-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+        <span>Or test with a sample policy:</span>
+      </div>
+      <div class="preset-chips" id="presetButtons">
+        <button class="preset-chip active" data-preset="hr_policy">
+          <span class="chip-name">🏢 Corporate HR Policy</span>
+          <span class="chip-desc">Probation & WFH</span>
+        </button>
+        <button class="preset-chip" data-preset="scholarship">
+          <span class="chip-name">🎓 University Scholarship</span>
+          <span class="chip-desc">GPA & Fees</span>
+        </button>
+        <button class="preset-chip" data-preset="fintech_loan">
+          <span class="chip-name">💳 Consumer Loan Terms</span>
+          <span class="chip-desc">APR & Late Fees</span>
+        </button>
+        <button class="preset-chip" data-preset="saas_privacy">
+          <span class="chip-name">☁️ Cloud Terms & Privacy</span>
+          <span class="chip-desc">Data Retention</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- INPUT BOX -->
+    <div class="card input-card">
+      <div class="input-card-tabs">
+        <button id="tabFiles" class="tab-button active">Upload Files (.PDF / .TXT / .MD)</button>
+        <button id="tabText" class="tab-button">Paste Text Directly</button>
+      </div>
+
+      <!-- TAB 1: FILE UPLOAD -->
+      <div id="fileUploadContainer" class="tab-content active">
+        <div class="upload-grid">
+          
+          <!-- OLD FILE DROPZONE -->
+          <div class="dropzone" id="dropzoneOld">
+            <input type="file" id="oldFileInput" accept=".pdf,.txt,.md,.json">
+            <div class="dropzone-tag">Original Version</div>
+            <div class="dropzone-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            </div>
+            <div class="dropzone-title">Select or drop original document</div>
+            <div class="dropzone-hint">Supports PDF, TXT, Markdown, or JSON</div>
+            <div class="file-name-tag" id="oldFileTag">
+              <span id="oldFileName">HR_Policy_2025_v1.0.txt</span>
+              <span class="file-size" id="oldFileSize">(Sample ready)</span>
+            </div>
+          </div>
+
+          <!-- NEW FILE DROPZONE -->
+          <div class="dropzone" id="dropzoneNew">
+            <input type="file" id="newFileInput" accept=".pdf,.txt,.md,.json">
+            <div class="dropzone-tag tag-new">Revised Version</div>
+            <div class="dropzone-icon icon-new">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+            </div>
+            <div class="dropzone-title">Select or drop revised document</div>
+            <div class="dropzone-hint">Supports PDF, TXT, Markdown, or JSON</div>
+            <div class="file-name-tag tag-new" id="newFileTag">
+              <span id="newFileName">HR_Policy_2026_v2.0.txt</span>
+              <span class="file-size" id="newFileSize">(Sample ready)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: DIRECT TEXT EDIT -->
+      <div id="textEditorContainer" class="tab-content">
+        <div class="text-editor-grid">
+          <div class="editor-box">
+            <div class="editor-header">
+              <span>Original Policy Text</span>
+              <span class="char-count" id="oldCharCount">0 chars</span>
+            </div>
+            <textarea id="rawOldText" placeholder="Paste the original document text here..."></textarea>
+          </div>
+          <div class="editor-box">
+            <div class="editor-header">
+              <span>Revised Policy Text</span>
+              <span class="char-count" id="newCharCount">0 chars</span>
+            </div>
+            <textarea id="rawNewText" placeholder="Paste the revised document text here..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARE BUTTON -->
+      <div class="compare-action-row">
+        <button id="compareBtn" class="btn-primary">
+          Compare Documents
+        </button>
+      </div>
+
+      <!-- ERROR MESSAGE -->
+      <div id="errorMessage" class="error-box hidden"></div>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div id="loadingState" class="card loading-card hidden">
+      <div class="spinner"></div>
+      <div class="loading-text">Comparing documents and extracting changes...</div>
+    </div>
+
+    <!-- RESULTS DASHBOARD -->
+    <section id="resultsSection" class="results-container hidden">
+
+      <!-- RESULTS OVERVIEW HEADER -->
+      <div class="card overview-card">
+        <div class="overview-header">
+          <div>
+            <div class="doc-comparison-title">
+              <span id="labelOldDoc">Original Policy</span>
+              <span class="arrow-separator">➔</span>
+              <span id="labelNewDoc">Revised Policy</span>
+            </div>
+            <div class="doc-comparison-subtitle">Comparison results generated from matched sections and clauses.</div>
+          </div>
+          <div class="export-btn-group">
+            <button id="btnExportCsv" class="btn-secondary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Export CSV
+            </button>
+            <button id="btnPrintReport" class="btn-secondary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              Print / Save PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- STATS ROW -->
+        <div class="stats-row">
+          <div class="stat-pill">
+            <span class="stat-number" id="totalChanges">0</span>
+            <span class="stat-label">Total Changes</span>
+          </div>
+          <div class="stat-pill pill-amber">
+            <span class="stat-number" id="modifiedCount">0</span>
+            <span class="stat-label">Modified Sections</span>
+          </div>
+          <div class="stat-pill pill-green">
+            <span class="stat-number" id="addedCount">0</span>
+            <span class="stat-label">Added Sections</span>
+          </div>
+          <div class="stat-pill pill-red">
+            <span class="stat-number" id="removedCount">0</span>
+            <span class="stat-label">Removed Sections</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KEY TAKEAWAYS SUMMARY CARD -->
+      <div class="card summary-box-card">
+        <div class="summary-box-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <h3>Key Changes at a Glance</h3>
+        </div>
+        <div id="executiveTakeaways" class="takeaways-grid"></div>
+      </div>
+
+      <!-- FILTER & VIEW CONTROLS -->
+      <div class="controls-toolbar">
+        <div class="search-input-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" placeholder="Filter by text, keywords, or values...">
+        </div>
+
+        <div class="category-filter-chips" id="categoryChips">
+          <button class="filter-chip active" data-filter="all">All Categories</button>
+          <button class="filter-chip" data-filter="Financial">Financial</button>
+          <button class="filter-chip" data-filter="Timeline">Timelines</button>
+          <button class="filter-chip" data-filter="Eligibility">Eligibility</button>
+          <button class="filter-chip" data-filter="Legal & Governance">Legal</button>
+          <button class="filter-chip" data-filter="Operational">Operational</button>
+        </div>
+
+        <div class="view-toggle-group">
+          <button class="view-btn active" data-view="sideBySide">Side-by-Side View</button>
+          <button class="view-btn" data-view="changeMatrix">Summary Table</button>
+          <button class="view-btn" data-view="deltasLedger">Value Shifts</button>
+        </div>
+      </div>
+
+      <!-- VIEW 1: SIDE-BY-SIDE CARDS -->
+      <div id="viewSideBySide" class="view-panel active">
+        <div id="clauseCardsContainer" class="clause-cards-list"></div>
+      </div>
+
+      <!-- VIEW 2: SUMMARY TABLE -->
+      <div id="viewChangeMatrix" class="view-panel">
+        <div class="card table-card">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Section / Heading</th>
+                <th style="width: 15%;">Category</th>
+                <th style="width: 12%;">Status</th>
+                <th style="width: 48%;">What Changed</th>
+              </tr>
+            </thead>
+            <tbody id="changeMatrixBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW 3: VALUE SHIFTS LEDGER -->
+      <div id="viewDeltasLedger" class="view-panel">
+        <div class="card table-card">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Original Value</th>
+                <th></th>
+                <th>Revised Value</th>
+                <th>Direction</th>
+                <th>Difference</th>
+              </tr>
+            </thead>
+            <tbody id="deltasLedgerBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-inner">
+      <span><strong>PolicyLens</strong> — Document Comparison System</span>
+      <span>Accurate text alignment and value extraction</span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
